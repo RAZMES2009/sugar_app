@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../helper/json_helper.dart';
 
-class Users with ChangeNotifier {
+class UserData with ChangeNotifier {
   Map<String, dynamic> _item = {};
 
   String _dropDownGender = 'Female';

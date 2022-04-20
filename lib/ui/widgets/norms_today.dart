@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sugar_app/providers/user_provider.dart';
+import 'package:sugar_app/providers/user_data_provider.dart';
 
 class NormsTodayWidget extends StatelessWidget {
   const NormsTodayWidget({
@@ -32,7 +32,7 @@ class ContainerTodayNorms extends StatelessWidget {
 
   Widget buildChart(String type, BuildContext context) {
     final userNorms =
-        Provider.of<Users>(context, listen: false).fetchData()['norms'];
+        Provider.of<UserData>(context, listen: false).fetchData()['norms'];
     return Row(
       children: [
         Padding(

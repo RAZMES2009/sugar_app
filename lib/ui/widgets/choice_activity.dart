@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/user_provider.dart';
+import '../../providers/user_data_provider.dart';
 
 class ChoiceActivity extends StatefulWidget {
   const ChoiceActivity({
@@ -18,7 +18,7 @@ class _ChoiceActivityState extends State<ChoiceActivity> {
   @override
   Widget build(BuildContext context) {
     final mediaQuerySize = MediaQuery.of(context).size;
-    final userData = Provider.of<Users>(context, listen: false);
+    final userData = Provider.of<UserData>(context, listen: false);
     return SizedBox(
       width: mediaQuerySize.width * 0.3,
       child: DropdownButton(

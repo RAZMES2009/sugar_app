@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../helper/json_helper.dart';
-import '../../providers/user_provider.dart';
+import '../../providers/user_data_provider.dart';
 import '../widgets/top_message.dart';
 
 class UserAllowanceScreen extends StatelessWidget {
@@ -70,7 +70,7 @@ class MaxMessageWidget extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          final userData = Provider.of<Users>(context, listen: false).fetchData();
+          final userData = Provider.of<UserData>(context, listen: false).fetchData();
           return Center(
             child: Container(
               width: mediaQuerySize.width * 0.9,

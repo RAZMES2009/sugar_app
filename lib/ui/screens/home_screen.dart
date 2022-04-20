@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/user_provider.dart';
+import '../../providers/user_data_provider.dart';
 import '../widgets/norms_today.dart';
 import '../widgets/ate_today_widget.dart';
 
@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userData = Provider.of<Users>(context, listen: false).fetchData();
+    final userData = Provider.of<UserData>(context, listen: false).fetchData();
     return Scaffold(
       appBar: AppBar(
         title: Text(

@@ -6,14 +6,14 @@ import './helper/json_helper.dart';
 import './ui/screens/about_app_screen.dart';
 import './ui/screens/user_allowance_screen.dart';
 import './ui/screens/registration_screen.dart';
-import './providers/user_provider.dart';
+import 'providers/user_data_provider.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => Users(),
+          create: (_) => UserData(),
         ),
       ],
       child: const SugarApp(),
@@ -62,7 +62,7 @@ class SugarApp extends StatelessWidget {
                 if (snapshot.data == null) {
                   return const CircularProgressIndicator();
                 }
-                final userData = Provider.of<Users>(context).fetchData();
+                final userData = Provider.of<UserData>(context).fetchData();
                 if (userData == null) {
                   return const AboutAppScreen();
                 }

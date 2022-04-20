@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sugar_app/helper/json_helper.dart';
 
 import '../screens/user_allowance_screen.dart';
-import '../../providers/user_provider.dart';
+import '../../providers/user_data_provider.dart';
 import './choice_gender.dart';
 import './forms_data_user.dart';
 import './choice_activity.dart';
@@ -16,7 +16,7 @@ class DataFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuerySize = MediaQuery.of(context).size;
-    final userData = Provider.of<Users>(context);
+    final userData = Provider.of<UserData>(context);
     final nameController = TextEditingController();
     final ageController = TextEditingController();
     final weightController = TextEditingController();
