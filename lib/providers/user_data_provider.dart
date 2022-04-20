@@ -64,12 +64,16 @@ class UserData with ChangeNotifier {
         'calory': normCalory.round(),
         'sugar': 30,
       },
-      'ate': {
+      'ateSumm': {
+        'sugar': 5,
+        'calory': 50,
+      },
+      'ateHistory': {
         '9:00': {
           'calory': 50,
           'sugar': 5,
         },
-      }
+      },
     };
 
     await JsonHelper.saveToStorage(_item);
@@ -78,6 +82,22 @@ class UserData with ChangeNotifier {
 
   dynamic fetchData() {
     final data = JsonHelper.fetchData();
+    if (data != null && _item.isEmpty) {
+      _item = data;
+    }
     return data;
+  }
+
+  double calculateHeightChart({
+    required String type,
+    required BuildContext context,
+  }) {
+    return type == 'Sugar'
+        ? MediaQuery.of(context).size.height *
+            0.15 *
+            (_item['ateSumm']['sugar'] / _item['norms']['sugar'])
+        : MediaQuery.of(context).size.height *
+            0.15 *
+            (_item['ateSumm']['calory'] / _item['norms']['calory']);
   }
 }

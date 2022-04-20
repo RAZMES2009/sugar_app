@@ -29,7 +29,8 @@ class AboutAppScreen extends StatelessWidget {
             ),
             const MessageWidget(
               messageTop: 'Sounds bad, right?',
-              messageBody: 'So let\'s start controlling the amount of our sugar',
+              messageBody:
+                  'So let\'s start controlling the amount of our sugar',
             ),
             Center(
               child: SizedBox(
@@ -37,8 +38,7 @@ class AboutAppScreen extends StatelessWidget {
                 height: mediaQuerySize.height * 0.05,
                 child: ElevatedButton(
                   style: Theme.of(context).elevatedButtonTheme.style,
-                  onPressed: () => Navigator.popAndPushNamed(
-                    context,
+                  onPressed: () => Navigator.of(context).pushReplacementNamed(
                     RegistrationScreen.routeName,
                   ),
                   child: const Text('Let\'s start'),

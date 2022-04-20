@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../helper/json_helper.dart';
 import '../../providers/user_data_provider.dart';
 import '../widgets/top_message.dart';
+import '../../ui/screens/home_screen.dart';
 
 class UserAllowanceScreen extends StatelessWidget {
   static const routeName = 'user-allowance';
@@ -38,7 +39,9 @@ class UserAllowanceScreen extends StatelessWidget {
                 height: mediaQuerySize.height * 0.05,
                 child: ElevatedButton(
                   style: Theme.of(context).elevatedButtonTheme.style,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+                  },
                   child: const Text('Next'),
                 ),
               ),

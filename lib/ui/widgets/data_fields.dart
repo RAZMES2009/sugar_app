@@ -77,8 +77,8 @@ class DataFields extends StatelessWidget {
                             weightString: weightController.text,
                             heightString: heightController.text,
                           );
-                          Navigator.popAndPushNamed(
-                              context, UserAllowanceScreen.routeName);
+                          Navigator.of(context).pushReplacementNamed(
+                              UserAllowanceScreen.routeName);
                         }
                       },
                       child: const Text('Next'),

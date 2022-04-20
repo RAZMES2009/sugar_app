@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../providers/user_data_provider.dart';
 import '../widgets/norms_today.dart';
 import '../widgets/ate_today_widget.dart';
+import '../widgets/my_fab.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = 'home-screen';
@@ -41,6 +42,7 @@ class HomeScreen extends StatelessWidget {
           AteTodayWidget(),
         ],
       ),
+      floatingActionButton: const MyFAB(),
     );
   }
 }

@@ -31,8 +31,8 @@ class ContainerTodayNorms extends StatelessWidget {
   }) : super(key: key);
 
   Widget buildChart(String type, BuildContext context) {
-    final userNorms =
-        Provider.of<UserData>(context, listen: false).fetchData()['norms'];
+    final userData = Provider.of<UserData>(context, listen: false).fetchData();
+    Provider.of<UserData>(context, listen: false);
     return Row(
       children: [
         Padding(
@@ -47,18 +47,10 @@ class ContainerTodayNorms extends StatelessWidget {
           children: [
             Text(
               type == 'Sugar'
-                  ? userNorms['sugar'].toString()
-                  : userNorms['calory'].toString(),
+                  ? userData['norms']['sugar'].toString()
+                  : userData['norms']['calory'].toString(),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.055,
-              height: MediaQuery.of(context).size.width * 0.3,
-              margin: const EdgeInsets.symmetric(vertical: 5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
+            Chart(type: type),
             const Text('0'),
           ],
         ),
@@ -80,6 +72,44 @@ class ContainerTodayNorms extends StatelessWidget {
         children: [
           buildChart('Sugar', context),
           buildChart('Calory', context),
+        ],
+      ),
+    );
+  }
+}
+
+class Chart extends StatelessWidget {
+  final String type;
+
+  const Chart({
+    Key? key,
+    required this.type,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.055,
+      height: MediaQuery.of(context).size.height * 0.15,
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            bottom: 0,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.055,
+              height: Provider.of<UserData>(context, listen: false)
+                  .calculateHeightChart(type: type, context: context),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
         ],
       ),
     );
