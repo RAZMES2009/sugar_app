@@ -8,19 +8,34 @@ import './choice_gender.dart';
 import './forms_data_user.dart';
 import './choice_activity.dart';
 
-class DataFields extends StatelessWidget {
+class DataFields extends StatefulWidget {
   const DataFields({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<DataFields> createState() => _DataFieldsState();
+}
+
+class _DataFieldsState extends State<DataFields> {
+  final nameController = TextEditingController();
+  final ageController = TextEditingController();
+  final weightController = TextEditingController();
+  final heightController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    ageController.dispose();
+    weightController.dispose();
+    heightController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final mediaQuerySize = MediaQuery.of(context).size;
     final userData = Provider.of<UserData>(context);
-    final nameController = TextEditingController();
-    final ageController = TextEditingController();
-    final weightController = TextEditingController();
-    final heightController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
     return FutureBuilder(
         future: JsonHelper.storage.ready,

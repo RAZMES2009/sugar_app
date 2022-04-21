@@ -20,7 +20,6 @@ class UserData with ChangeNotifier {
 
   Future<void> createUser({
     required String name,
-    String? gender,
     required String ageString,
     required String weightString,
     required String heightString,
@@ -49,9 +48,11 @@ class UserData with ChangeNotifier {
         activity = 1.55;
         break;
     }
-    gender == 'male'
+    _dropDownGender == 'Male'
         ? normCalory = (weight * 10 + height * 6.25 - age * 5 + 5) * activity
         : normCalory = (weight * 10 + height * 6.25 - age * 5 - 161) * activity;
+
+    final normSugar = _dropDownGender == 'Male' ? 60 : 30;
 
     _item = {
       'name': name,
@@ -62,18 +63,13 @@ class UserData with ChangeNotifier {
       'activity': _dropDownActivity,
       'norms': {
         'calory': normCalory.round(),
-        'sugar': 30,
+        'sugar': normSugar,
       },
       'ateSumm': {
-        'sugar': 5,
-        'calory': 50,
+        'sugar': 0,
+        'calory': 0,
       },
-      'ateHistory': {
-        '9:00': {
-          'calory': 50,
-          'sugar': 5,
-        },
-      },
+      'ateHistory': {},
     };
 
     await JsonHelper.saveToStorage(_item);
@@ -85,13 +81,45 @@ class UserData with ChangeNotifier {
     if (data != null && _item.isEmpty) {
       _item = data;
     }
+    ChangeNotifier();
     return data;
+  }
+
+  Future<void> addAteProduct({
+    required String time,
+    required String name,
+    required String sugarString,
+    required String caloryString,
+  }) async {
+    final data = fetchData();
+    final sugar = int.parse(sugarString);
+    final calory = int.parse(caloryString);
+    Map<String, Map<String, dynamic>> newProduct = {
+      name: {
+        'time': time,
+        'sugar': sugar,
+        'calory': calory,
+      }
+    };
+    Map<String, dynamic> ateSummUser = {
+      'sugar': data['ateSumm']['sugar'] + sugar,
+      'calory': data['ateSumm']['calory'] + calory,
+    };
+    _item.update('ateHistory', ((value) => newProduct));
+    _item.update('ateSumm', (value) => ateSummUser);
+    await JsonHelper.saveToStorage(_item);
+    ChangeNotifier();
+    print(_item);
   }
 
   double calculateHeightChart({
     required String type,
     required BuildContext context,
   }) {
+    if (_item['ateSumm']['sugar'] / _item['norms']['sugar'] > 1 ||
+        _item['ateSumm']['calory'] / _item['norms']['calory'] > 1) {
+      return 1;
+    }
     return type == 'Sugar'
         ? MediaQuery.of(context).size.height *
             0.15 *
@@ -99,5 +127,9 @@ class UserData with ChangeNotifier {
         : MediaQuery.of(context).size.height *
             0.15 *
             (_item['ateSumm']['calory'] / _item['norms']['calory']);
+  }
+
+  Future<void> clearAllData() async {
+    await JsonHelper.clearAllData();
   }
 }

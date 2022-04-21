@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sugar_app/providers/user_data_provider.dart';
+
+import '../../providers/user_data_provider.dart';
 
 class NormsTodayWidget extends StatelessWidget {
   const NormsTodayWidget({
@@ -31,7 +32,7 @@ class ContainerTodayNorms extends StatelessWidget {
   }) : super(key: key);
 
   Widget buildChart(String type, BuildContext context) {
-    final userData = Provider.of<UserData>(context, listen: false).fetchData();
+    final userData = Provider.of<UserData>(context).fetchData();
     Provider.of<UserData>(context, listen: false);
     return Row(
       children: [
@@ -78,7 +79,7 @@ class ContainerTodayNorms extends StatelessWidget {
   }
 }
 
-class Chart extends StatelessWidget {
+class Chart extends StatefulWidget {
   final String type;
 
   const Chart({
@@ -86,6 +87,11 @@ class Chart extends StatelessWidget {
     required this.type,
   }) : super(key: key);
 
+  @override
+  State<Chart> createState() => _ChartState();
+}
+
+class _ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -102,10 +108,10 @@ class Chart extends StatelessWidget {
             bottom: 0,
             child: Container(
               width: MediaQuery.of(context).size.width * 0.055,
-              height: Provider.of<UserData>(context, listen: false)
-                  .calculateHeightChart(type: type, context: context),
+              height: Provider.of<UserData>(context)
+                  .calculateHeightChart(type: widget.type, context: context),
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: const Color.fromRGBO(44, 55, 64, 1),
                 borderRadius: BorderRadius.circular(20),
               ),
             ),

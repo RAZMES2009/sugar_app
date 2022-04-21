@@ -10,4 +10,8 @@ class JsonHelper {
   static fetchData() {
     return storage.getItem('AUrdf@#4SD');
   }
+
+  static Future<void> clearAllData() async {
+    await storage.clear();
+  }
 }

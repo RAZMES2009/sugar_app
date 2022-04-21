@@ -34,13 +34,19 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          NormsTodayWidget(),
-          AteTodayWidget(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: const [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 30),
+              child: NormsTodayWidget(),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: AteTodayWidget(),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: const MyFAB(),
     );
