@@ -13,6 +13,7 @@ class AddingNewInfoAte extends StatefulWidget {
 }
 
 class _AddingNewInfoAteState extends State<AddingNewInfoAte> {
+  final _formKey = GlobalKey<FormState>();
   final nameProductController = TextEditingController();
   final sugarProductController = TextEditingController();
   final caloryProductController = TextEditingController();
@@ -28,55 +29,67 @@ class _AddingNewInfoAteState extends State<AddingNewInfoAte> {
   @override
   Widget build(BuildContext context) {
     final mediaQuerySize = MediaQuery.of(context).size;
-    return SizedBox(
-      width: mediaQuerySize.width,
-      height: mediaQuerySize.height * 0.4,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          buildRowsTextField(
-            context: context,
-            mediaQuerySize: mediaQuerySize,
-            type: 'Product',
-            controller: nameProductController,
-            message: messageProduct,
-          ),
-          buildRowsTextField(
-            context: context,
-            mediaQuerySize: mediaQuerySize,
-            type: 'Sugar',
-            controller: sugarProductController,
-            message: messageAmountSugar,
-          ),
-          buildRowsTextField(
-            context: context,
-            mediaQuerySize: mediaQuerySize,
-            type: 'Calory',
-            controller: caloryProductController,
-            message: messageAmountCalory,
-          ),
-          Center(
-            child: SizedBox(
-              width: mediaQuerySize.width * 0.6,
-              height: mediaQuerySize.height * 0.05,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Provider.of<UserData>(context, listen: false).clearAllData();
-                  Navigator.of(context).pop();
-                  Provider.of<UserData>(context, listen: false).addAteProduct(
-                    name: nameProductController.text,
-                    time: DateTime.now().toIso8601String(),
-                    sugarString: sugarProductController.text,
-                    caloryString: caloryProductController.text,
-                  );
-                  Navigator.of(context).popAndPushNamed(HomeScreen.routeName);
-                },
-                child: const Text('Add'),
-                style: Theme.of(context).elevatedButtonTheme.style,
+    return Padding(
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: SizedBox(
+        width: mediaQuerySize.width,
+        height: mediaQuerySize.height * 0.4,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              buildRowsTextField(
+                context: context,
+                mediaQuerySize: mediaQuerySize,
+                type: 'Product',
+                controller: nameProductController,
+                message: messageProduct,
               ),
-            ),
+              buildRowsTextField(
+                context: context,
+                mediaQuerySize: mediaQuerySize,
+                type: 'Sugar',
+                controller: sugarProductController,
+                message: messageAmountSugar,
+              ),
+              buildRowsTextField(
+                context: context,
+                mediaQuerySize: mediaQuerySize,
+                type: 'Calory',
+                controller: caloryProductController,
+                message: messageAmountCalory,
+              ),
+              Center(
+                child: SizedBox(
+                  width: mediaQuerySize.width * 0.6,
+                  height: mediaQuerySize.height * 0.05,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        Navigator.of(context).pop();
+                        if (nameProductController.text.isNotEmpty) {
+                          Provider.of<UserData>(context, listen: false)
+                              .addAteProduct(
+                            name: nameProductController.text,
+                            time: DateTime.now().toIso8601String(),
+                            sugarString: sugarProductController.text,
+                            caloryString: caloryProductController.text,
+                          );
+                          Navigator.of(context)
+                              .popAndPushNamed(HomeScreen.routeName);
+                        }
+                      }
+                    },
+                    child: const Text('Add'),
+                    style: Theme.of(context).elevatedButtonTheme.style,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -132,6 +145,26 @@ class _AddingNewInfoAteState extends State<AddingNewInfoAte> {
       width: mediaQuerySize.width * 0.8,
       child: TextFormField(
         controller: controller,
+        validator: (String? value) {
+          if (value == null || value.isEmpty) {
+            return null;
+          }
+          if (type == 'Product' &&
+              value.contains(RegExp(r'[0-9\^$*.\[\]{}()?\-"!@#%&/\,><:;_~`+='
+                  "'"
+                  ']'))) {
+            return 'Please enter correct data';
+          }
+          if ((type == 'Calory' || type == 'Sugar') && value.contains('-')) {
+            return 'Please enter correct data';
+          }
+          if ((type == 'Calory' || type == 'Sugar') && value.contains(',')) {
+            return 'Please use \'.\' instead of \',\'';
+          }
+          return null;
+        },
+        keyboardType:
+            type == 'Product' ? TextInputType.name : TextInputType.number,
         decoration: InputDecoration(
           fillColor: Theme.of(context).colorScheme.primary,
           filled: true,

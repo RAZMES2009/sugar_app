@@ -92,8 +92,8 @@ class UserData with ChangeNotifier {
     required String caloryString,
   }) async {
     final data = fetchData();
-    final sugar = int.parse(sugarString);
-    final calory = int.parse(caloryString);
+    final sugar = double.parse(sugarString).round();
+    final calory = double.parse(caloryString).round();
     Map<String, Map<String, dynamic>> newProduct = {
       name: {
         'time': time,
@@ -105,11 +105,10 @@ class UserData with ChangeNotifier {
       'sugar': data['ateSumm']['sugar'] + sugar,
       'calory': data['ateSumm']['calory'] + calory,
     };
-    _item.update('ateHistory', ((value) => newProduct));
+    _item.addAll(newProduct);
     _item.update('ateSumm', (value) => ateSummUser);
     await JsonHelper.saveToStorage(_item);
     ChangeNotifier();
-    print(_item);
   }
 
   double calculateHeightChart({
