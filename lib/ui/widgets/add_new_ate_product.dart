@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sugar_app/ui/screens/home_screen.dart';
+import 'package:intl/intl.dart';
 
+import '../screens/home_screen.dart';
 import '../../providers/user_data_provider.dart';
 import '../../texts/messages.dart';
 
@@ -73,7 +74,8 @@ class _AddingNewInfoAteState extends State<AddingNewInfoAte> {
                           Provider.of<UserData>(context, listen: false)
                               .addAteProduct(
                             name: nameProductController.text,
-                            time: DateTime.now().toIso8601String(),
+                            time:
+                                DateFormat.jm().format(DateTime.now()),
                             sugarString: sugarProductController.text,
                             caloryString: caloryProductController.text,
                           );

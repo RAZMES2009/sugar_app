@@ -69,7 +69,8 @@ class UserData with ChangeNotifier {
         'sugar': 0,
         'calory': 0,
       },
-      'ateHistory': {},
+      'ateHistory': null,
+      'ateHistoryLen': '0',
     };
 
     await JsonHelper.saveToStorage(_item);
@@ -94,11 +95,10 @@ class UserData with ChangeNotifier {
     final data = fetchData();
     final sugar = double.parse(sugarString).round();
     final calory = double.parse(caloryString).round();
-    if (_item['ateHistory'][name] != null) {
-      name += time;
-    }
+    final ateHistoryLenAdd = int.parse(_item['ateHistoryLen'])+1;
     Map<String, Map<String, dynamic>> newProduct = {
-      name: {
+      _item['ateHistoryLen'] : {
+        'name': name,
         'time': time,
         'sugar': sugar,
         'calory': calory,
@@ -108,8 +108,11 @@ class UserData with ChangeNotifier {
       'sugar': data['ateSumm']['sugar'] + sugar,
       'calory': data['ateSumm']['calory'] + calory,
     };
-    _item['ateHistory'].addAll(newProduct);
+    _item['ateHistory'] == null
+        ? _item['ateHistory'] = newProduct
+        : _item['ateHistory'].addAll(newProduct);
     _item.update('ateSumm', (value) => ateSummUser);
+    _item.update('ateHistoryLen', (value) => ateHistoryLenAdd.toString());
     await JsonHelper.saveToStorage(_item);
     ChangeNotifier();
   }

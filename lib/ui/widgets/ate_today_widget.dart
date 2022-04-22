@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/user_data_provider.dart';
+import './card_product_ate.dart';
 
 class AteTodayWidget extends StatelessWidget {
   const AteTodayWidget({
@@ -7,6 +11,8 @@ class AteTodayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userData = Provider.of<UserData>(context).fetchData();
+    // Provider.of<UserData>(context).clearAllData();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -18,15 +24,18 @@ class AteTodayWidget extends StatelessWidget {
           ),
         ),
         Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 0.3,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [],
+          child: ListView.builder(
+            itemCount: int.parse(userData['ateHistoryLen']),
+            itemBuilder: (ctx, i) => CardProductAte(
+              userAteHistory: userData['ateHistory'][i.toString()],
+            ),
           ),
         ),
       ],
