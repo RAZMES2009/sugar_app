@@ -205,5 +205,3 @@ class _AddingNewInfoAteState extends State<AddingNewInfoAte> {
     );
   }
 }
-
-

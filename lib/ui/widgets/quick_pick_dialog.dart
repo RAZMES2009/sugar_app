@@ -87,6 +87,7 @@ class ChoiceAmountSpoonsSugar extends StatelessWidget {
   TextButton buildButton(int num, String type, BuildContext ctx) {
     return TextButton(
       onPressed: () {
+        Navigator.of(ctx).pop();
         Provider.of<UserData>(ctx, listen: false).addAteProduct(
             time: DateFormat.jm().format(DateTime.now()),
             name: type == 'Coffee' ? type : 'Tea',
