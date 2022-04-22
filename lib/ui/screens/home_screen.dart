@@ -14,10 +14,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData>(context, listen: false).fetchData();
+    final getTime = Provider.of<UserData>(context, listen: false).timeDay();
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Hi, ' + userData['name'] + '!',
+          getTime + userData['name'] + '!',
           style: const TextStyle(
             color: Colors.black,
             fontSize: 24,

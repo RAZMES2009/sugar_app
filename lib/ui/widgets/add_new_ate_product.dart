@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+import './quick_pick_dialog.dart';
 import '../screens/home_screen.dart';
 import '../../providers/user_data_provider.dart';
 import '../../texts/messages.dart';
@@ -63,30 +64,47 @@ class _AddingNewInfoAteState extends State<AddingNewInfoAte> {
                 message: messageAmountCalory,
               ),
               Center(
-                child: SizedBox(
-                  width: mediaQuerySize.width * 0.6,
-                  height: mediaQuerySize.height * 0.05,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
                         Navigator.of(context).pop();
-                        if (nameProductController.text.isNotEmpty) {
-                          Provider.of<UserData>(context, listen: false)
-                              .addAteProduct(
-                            name: nameProductController.text,
-                            time:
-                                DateFormat.jm().format(DateTime.now()),
-                            sugarString: sugarProductController.text,
-                            caloryString: caloryProductController.text,
-                          );
-                          Navigator.of(context)
-                              .popAndPushNamed(HomeScreen.routeName);
-                        }
-                      }
-                    },
-                    child: const Text('Add'),
-                    style: Theme.of(context).elevatedButtonTheme.style,
-                  ),
+                        showDialog(
+                          context: context,
+                          builder: (ctx) => const QuickPickDialog(),
+                        );
+                      },
+                      child: const Text(
+                        'Quick pick',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                    SizedBox(
+                      width: mediaQuerySize.width * 0.5,
+                      height: mediaQuerySize.height * 0.05,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.of(context).pop();
+                            if (nameProductController.text.isNotEmpty) {
+                              Provider.of<UserData>(context, listen: false)
+                                  .addAteProduct(
+                                name: nameProductController.text,
+                                time: DateFormat.jm().format(DateTime.now()),
+                                sugarString: sugarProductController.text,
+                                caloryString: caloryProductController.text,
+                              );
+                              Navigator.of(context)
+                                  .popAndPushNamed(HomeScreen.routeName);
+                            }
+                          }
+                        },
+                        child: const Text('Add'),
+                        style: Theme.of(context).elevatedButtonTheme.style,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -187,3 +205,5 @@ class _AddingNewInfoAteState extends State<AddingNewInfoAte> {
     );
   }
 }
+
+

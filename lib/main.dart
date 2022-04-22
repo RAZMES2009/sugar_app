@@ -62,7 +62,8 @@ class SugarApp extends StatelessWidget {
                 if (snapshot.data == null) {
                   return const CircularProgressIndicator();
                 }
-                final userData = Provider.of<UserData>(context, listen: false).fetchData();
+                final userData =
+                    Provider.of<UserData>(context, listen: false).fetchData();
                 if (userData == null) {
                   return const AboutAppScreen();
                 }

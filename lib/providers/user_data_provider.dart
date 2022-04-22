@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../helper/json_helper.dart';
 
@@ -95,9 +96,9 @@ class UserData with ChangeNotifier {
     final data = fetchData();
     final sugar = double.parse(sugarString).round();
     final calory = double.parse(caloryString).round();
-    final ateHistoryLenAdd = int.parse(_item['ateHistoryLen'])+1;
+    final ateHistoryLenAdd = int.parse(_item['ateHistoryLen']) + 1;
     Map<String, Map<String, dynamic>> newProduct = {
-      _item['ateHistoryLen'] : {
+      _item['ateHistoryLen']: {
         'name': name,
         'time': time,
         'sugar': sugar,
@@ -140,6 +141,19 @@ class UserData with ChangeNotifier {
       } else {
         return chartCalory;
       }
+    }
+  }
+
+  String timeDay() {
+    final int time = int.parse(DateFormat.H().format(DateTime.now()));
+    if (0 <= time && time < 6) {
+      return 'Good night, ';
+    } else if (6 <= time && time < 12) {
+      return 'Good morning, ';
+    } else if (12 <= time && time < 18) {
+      return 'Good day, ';
+    } else {
+      return 'Good evening, ';
     }
   }
 
