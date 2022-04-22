@@ -78,7 +78,7 @@ class UserData with ChangeNotifier {
 
   dynamic fetchData() {
     final data = JsonHelper.fetchData();
-    if (data != null && _item.isEmpty) {
+    if (data != null) {
       _item = data;
     }
     ChangeNotifier();
@@ -94,6 +94,9 @@ class UserData with ChangeNotifier {
     final data = fetchData();
     final sugar = double.parse(sugarString).round();
     final calory = double.parse(caloryString).round();
+    if (_item['ateHistory'][name] != null) {
+      name += time;
+    }
     Map<String, Map<String, dynamic>> newProduct = {
       name: {
         'time': time,
@@ -105,7 +108,7 @@ class UserData with ChangeNotifier {
       'sugar': data['ateSumm']['sugar'] + sugar,
       'calory': data['ateSumm']['calory'] + calory,
     };
-    _item.addAll(newProduct);
+    _item['ateHistory'].addAll(newProduct);
     _item.update('ateSumm', (value) => ateSummUser);
     await JsonHelper.saveToStorage(_item);
     ChangeNotifier();
@@ -115,17 +118,26 @@ class UserData with ChangeNotifier {
     required String type,
     required BuildContext context,
   }) {
-    if (_item['ateSumm']['sugar'] / _item['norms']['sugar'] > 1 ||
-        _item['ateSumm']['calory'] / _item['norms']['calory'] > 1) {
-      return 1;
+    final chartSugar = MediaQuery.of(context).size.height *
+        0.15 *
+        (_item['ateSumm']['sugar'] / _item['norms']['sugar']);
+    final chartCalory = MediaQuery.of(context).size.height *
+        0.15 *
+        (_item['ateSumm']['calory'] / _item['norms']['calory']);
+    final maxHeight = MediaQuery.of(context).size.height * 0.15;
+    if (type == 'Sugar') {
+      if (_item['ateSumm']['sugar'] / _item['norms']['sugar'] > 1) {
+        return maxHeight;
+      } else {
+        return chartSugar;
+      }
+    } else {
+      if (_item['ateSumm']['calory'] / _item['norms']['calory'] > 1) {
+        return maxHeight;
+      } else {
+        return chartCalory;
+      }
     }
-    return type == 'Sugar'
-        ? MediaQuery.of(context).size.height *
-            0.15 *
-            (_item['ateSumm']['sugar'] / _item['norms']['sugar'])
-        : MediaQuery.of(context).size.height *
-            0.15 *
-            (_item['ateSumm']['calory'] / _item['norms']['calory']);
   }
 
   Future<void> clearAllData() async {
