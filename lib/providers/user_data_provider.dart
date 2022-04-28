@@ -93,10 +93,16 @@ class UserData with ChangeNotifier {
     required String sugarString,
     required String caloryString,
   }) async {
-    final data = fetchData();
+    fetchData();
+    final date = DateFormat.Md().format(DateTime.now());
     final sugar = double.parse(sugarString).round();
     final calory = double.parse(caloryString).round();
     final ateHistoryLenAdd = int.parse(_item['ateHistoryLen']) + 1;
+
+    Map<String, dynamic> dateTime = {
+      date: null,
+    };
+
     Map<String, Map<String, dynamic>> newProduct = {
       _item['ateHistoryLen']: {
         'name': name,
@@ -106,14 +112,34 @@ class UserData with ChangeNotifier {
       }
     };
     Map<String, dynamic> ateSummUser = {
-      'sugar': data['ateSumm']['sugar'] + sugar,
-      'calory': data['ateSumm']['calory'] + calory,
+      'sugar': _item['ateSumm']['sugar'] + sugar,
+      'calory': _item['ateSumm']['calory'] + calory,
     };
-    _item['ateHistory'] == null
-        ? _item['ateHistory'] = newProduct
-        : _item['ateHistory'].addAll(newProduct);
+
+    print(_item);
+    if (_item['ateHistory'] == null) {
+      _item['ateHistory'] = dateTime;
+    } else {
+      final itemKeys = _item['ateHistory'].keys;
+      bool isDateEqual = false;
+      for (var item in itemKeys) {
+        if (item == date) {
+          isDateEqual = true;
+          break;
+        }
+      }
+      if (!isDateEqual) {
+        _item['ateHistory'].addAll(dateTime);
+      }
+    }
+    print(_item);
+    _item['ateHistory'][date] == null
+        ? _item['ateHistory'][date] = newProduct
+        : _item['ateHistory'][date].addAll(newProduct);
+
     _item.update('ateSumm', (value) => ateSummUser);
     _item.update('ateHistoryLen', (value) => ateHistoryLenAdd.toString());
+    print(_item);
     await JsonHelper.saveToStorage(_item);
     ChangeNotifier();
   }

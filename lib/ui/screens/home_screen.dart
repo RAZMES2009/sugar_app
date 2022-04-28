@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sugar_app/helper/json_helper.dart';
 
+import './settings_screen.dart';
 import '../../providers/user_data_provider.dart';
 import '../widgets/norms_today.dart';
 import '../widgets/ate_today_widget.dart';
@@ -26,7 +28,8 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () =>
+                Navigator.of(context).pushNamed(SettingsScreen.routeName),
             icon: const Icon(
               Icons.settings_outlined,
               color: Colors.black,
@@ -35,19 +38,29 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 30),
-              child: NormsTodayWidget(),
+      body: FutureBuilder(
+        future: JsonHelper.storage.ready,
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return SingleChildScrollView(
+            child: Column(
+              children: const [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 30),
+                  child: NormsTodayWidget(),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: AteTodayWidget(),
+                ),
+              ],
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: AteTodayWidget(),
-            ),
-          ],
-        ),
+          );
+        },
       ),
       floatingActionButton: const MyFAB(),
     );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sugar_app/ui/screens/home_screen.dart';
 
+import './ui/screens/home_screen.dart';
+import './ui/screens/settings_screen.dart';
 import './helper/json_helper.dart';
 import './ui/screens/about_app_screen.dart';
 import './ui/screens/user_allowance_screen.dart';
@@ -73,6 +74,7 @@ class SugarApp extends StatelessWidget {
         RegistrationScreen.routeName: (ctx) => const RegistrationScreen(),
         UserAllowanceScreen.routeName: (ctx) => const UserAllowanceScreen(),
         HomeScreen.routeName: (ctx) => const HomeScreen(),
+        SettingsScreen.routeName: (ctx) => const SettingsScreen(),
       },
     );
   }

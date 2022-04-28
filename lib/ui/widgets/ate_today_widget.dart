@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/user_data_provider.dart';
@@ -12,7 +13,7 @@ class AteTodayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData>(context).fetchData();
-    // Provider.of<UserData>(context).clearAllData();
+    final date = DateFormat.Md().format(DateTime.now());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,7 +35,7 @@ class AteTodayWidget extends StatelessWidget {
           child: ListView.builder(
             itemCount: int.parse(userData['ateHistoryLen']),
             itemBuilder: (ctx, i) => CardProductAte(
-              userAteHistory: userData['ateHistory'][i.toString()],
+              userAteHistory: userData['ateHistory'][date][i.toString()],
             ),
           ),
         ),
