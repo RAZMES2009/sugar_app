@@ -79,10 +79,32 @@ class UserData with ChangeNotifier {
   }
 
   dynamic fetchData() {
+    final date = DateFormat.Md().format(DateTime.now());
     final data = JsonHelper.fetchData();
+
+    if (data['ateHistory'] != null) {
+      final dataKeys = data['ateHistory'].keys;
+      bool isDateEqual = false;
+      for (var item in dataKeys) {
+        if (item == date) {
+          isDateEqual = true;
+          break;
+        }
+      }
+      if (!isDateEqual) {
+        data['ateHistory'] = null;
+        data['ateHistoryLen'] = '0';
+        data['ateSumm'] = {
+          'sugar': 0,
+          'calory': 0,
+        };
+      }
+    }
+
     if (data != null) {
       _item = data;
     }
+
     ChangeNotifier();
     return data;
   }
@@ -116,7 +138,6 @@ class UserData with ChangeNotifier {
       'calory': _item['ateSumm']['calory'] + calory,
     };
 
-    print(_item);
     if (_item['ateHistory'] == null) {
       _item['ateHistory'] = dateTime;
     } else {
@@ -132,14 +153,14 @@ class UserData with ChangeNotifier {
         _item['ateHistory'].addAll(dateTime);
       }
     }
-    print(_item);
+
     _item['ateHistory'][date] == null
         ? _item['ateHistory'][date] = newProduct
         : _item['ateHistory'][date].addAll(newProduct);
 
     _item.update('ateSumm', (value) => ateSummUser);
     _item.update('ateHistoryLen', (value) => ateHistoryLenAdd.toString());
-    print(_item);
+
     await JsonHelper.saveToStorage(_item);
     ChangeNotifier();
   }

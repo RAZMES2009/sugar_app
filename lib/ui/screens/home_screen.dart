@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sugar_app/helper/json_helper.dart';
+import 'package:sugar_app/ui/screens/registration_screen.dart';
 
 import './settings_screen.dart';
 import '../../providers/user_data_provider.dart';
@@ -28,8 +29,48 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () =>
-                Navigator.of(context).pushNamed(SettingsScreen.routeName),
+            onPressed: () => showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text('Reset data'),
+                content: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      const Text(
+                          'If you want change data about you press button'),
+                      TextButton(
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Provider.of<UserData>(context, listen: false)
+                              .clearAllData();
+                          Navigator.of(context)
+                              .popAndPushNamed(RegistrationScreen.routeName);
+                        },
+                        child: const Text(
+                          'Reset my data',
+                          style: TextStyle(
+                            fontSize: 24,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('Back'),
+                  )
+                ],
+              ),
+            ),
             icon: const Icon(
               Icons.settings_outlined,
               color: Colors.black,
